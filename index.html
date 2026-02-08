@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Meme Generator</h1>
+            <p>Upload an image and add your text to create a meme!</p>
+        </header>
+
+        <div class="controls">
+            <div class="upload-section">
+                <label for="imageUpload" class="upload-label">
+                    <span>Choose Image</span>
+                    <input type="file" id="imageUpload" accept="image/*" hidden>
+                </label>
+            </div>
+
+            <div class="templates-section">
+                <h3>Or Choose a Template:</h3>
+                <div class="templates-grid">
+                    <div class="template-item" data-template="assets/revenge.jpg">
+                        <img src="assets/revenge.jpg" alt="Revenge Template">
+                        <span>Revenge</span>
+                    </div>
+                    <div class="template-item" data-template="assets/successkid.jpg">
+                        <img src="assets/successkid.jpg" alt="Success Kid Template">
+                        <span>Success Kid</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-controls">
+                <div class="text-panel" data-text="top">
+                    <h3>Top Text</h3>
+                    <div class="input-group">
+                        <label for="topText">Text:</label>
+                        <textarea id="topText" placeholder="Enter top text... (Press Enter for new line)" rows="3"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="topColor">Color:</label>
+                        <input type="color" id="topColor" value="#ffffff">
+                    </div>
+                    <div class="input-group">
+                        <label for="topRotation">Rotation (°):</label>
+                        <input type="range" id="topRotation" min="0" max="360" value="0">
+                        <span id="topRotationValue">0</span>
+                    </div>
+                    <button class="select-text-btn" data-text="top">Click to Position</button>
+                </div>
+                <div class="text-panel" data-text="center">
+                    <h3>Center Text</h3>
+                    <div class="input-group">
+                        <label for="centerText">Text:</label>
+                        <textarea id="centerText" placeholder="Enter center text... (Press Enter for new line)" rows="3"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="centerColor">Color:</label>
+                        <input type="color" id="centerColor" value="#ffffff">
+                    </div>
+                    <div class="input-group">
+                        <label for="centerRotation">Rotation (°):</label>
+                        <input type="range" id="centerRotation" min="0" max="360" value="0">
+                        <span id="centerRotationValue">0</span>
+                    </div>
+                    <button class="select-text-btn" data-text="center">Click to Position</button>
+                </div>
+                <div class="text-panel" data-text="bottom">
+                    <h3>Bottom Text</h3>
+                    <div class="input-group">
+                        <label for="bottomText">Text:</label>
+                        <textarea id="bottomText" placeholder="Enter bottom text... (Press Enter for new line)" rows="3"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="bottomColor">Color:</label>
+                        <input type="color" id="bottomColor" value="#ffffff">
+                    </div>
+                    <div class="input-group">
+                        <label for="bottomRotation">Rotation (°):</label>
+                        <input type="range" id="bottomRotation" min="0" max="360" value="0">
+                        <span id="bottomRotationValue">0</span>
+                    </div>
+                    <button class="select-text-btn" data-text="bottom">Click to Position</button>
+                </div>
+            </div>
+
+            <div class="font-controls">
+                <div class="input-group">
+                    <label for="fontSize">Font Size:</label>
+                    <input type="range" id="fontSize" min="20" max="80" value="40">
+                    <span id="fontSizeValue">40</span>
+                </div>
+            </div>
+
+            <button id="downloadBtn" class="download-btn" disabled>Download Meme</button>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="memeCanvas"></canvas>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
