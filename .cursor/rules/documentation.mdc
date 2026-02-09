@@ -1,0 +1,123 @@
+---
+name: documentation
+description: Documentation and project management best practices
+---
+
+# Documentation Best Practices
+
+## General Documentation Principles
+
+- Write clear, concise, and accurate documentation
+- Keep documentation up to date with code changes
+- Use examples to illustrate concepts
+- Write for your audience (beginners vs. experts)
+- Document "why" not just "what"
+- Keep documentation organized and easy to navigate
+
+## README.md Guidelines
+
+### Essential Sections
+- Project title and description
+- Features list
+- Installation/setup instructions
+- Usage examples
+- Technologies used
+- File structure
+- Contributing guidelines (if open source)
+- License information
+
+### Best Practices
+- Start with a clear project description
+- Include screenshots or demos if applicable
+- Provide clear setup instructions
+- Include code examples
+- Keep it updated as the project evolves
+- Use proper markdown formatting
+- Add a table of contents for long READMEs
+
+## Code Documentation
+
+### Comments
+- Write self-documenting code (prefer clear code over comments)
+- Add comments for complex logic or algorithms
+- Explain "why" not "what"
+- Keep comments up to date with code changes
+- Remove commented-out code before committing
+
+### JSDoc for JavaScript
+- Document function parameters and return values
+- Include examples for complex functions
+- Document exceptions that may be thrown
+- Use proper JSDoc syntax
+
+Example:
+```javascript
+/**
+ * Draws text on canvas with rotation and multi-line support
+ * @param {CanvasRenderingContext2D} ctx - The canvas context
+ * @param {string} text - The text to draw
+ * @param {number} x - X coordinate
+ * @param {number} y - Y coordinate
+ * @param {string} color - Text color (hex format)
+ * @param {number} rotation - Rotation angle in degrees
+ */
+function drawText(ctx, text, x, y, color, rotation) {
+    // ...
+}
+```
+
+## Inline Documentation
+
+- Use meaningful variable names (self-documenting)
+- Break complex operations into named steps
+- Add comments for non-obvious code
+- Document edge cases and assumptions
+- Explain workarounds or temporary solutions
+
+## Git Commit Messages
+
+- Use present tense: "Add feature" not "Added feature"
+- Be specific and descriptive
+- Reference issues/tickets if applicable
+- Keep first line under 50 characters
+- Add detailed body for complex changes
+
+Good examples:
+- "Fix text positioning bug on canvas resize"
+- "Add error handling for image upload failures"
+- "Improve accessibility: add ARIA labels to inputs"
+
+Bad examples:
+- "fix bug"
+- "update code"
+- "changes"
+
+## Project Documentation Structure
+
+```
+project/
+├── README.md              # Main project documentation
+├── CHANGELOG.md           # Version history (optional)
+├── CONTRIBUTING.md        # Contribution guidelines (optional)
+├── LICENSE                # License file
+└── docs/                  # Additional documentation (if needed)
+    ├── api.md
+    └── architecture.md
+```
+
+## Documentation Maintenance
+
+- Review documentation when code changes
+- Remove outdated information
+- Update examples to match current code
+- Keep documentation in sync with features
+- Ask for feedback on documentation clarity
+
+## Best Practices for This Project
+
+- Keep README.md updated with new features
+- Document complex functions in script.js
+- Add comments for non-obvious canvas operations
+- Document browser compatibility issues if any
+- Keep Git commit messages descriptive
+- Update file structure in README when adding files

@@ -1,13 +1,19 @@
-// Import core functions
+/**
+ * Meme Generator Application
+ * DOM initialization and event handlers
+ */
+
 import {
     wrapText,
     drawText,
-    calculateDisplayDimensions,
+    calculateCanvasScale,
+    screenToCanvasCoords,
     initializeTextPositions,
-    getCanvasCoordinates,
-    validateImageFile,
-    drawMeme
-} from './src/memeGenerator.js';
+    calculateDisplayDimensions,
+    isValidImageFile,
+    validateRotation,
+    validateFontSize
+} from './memeGenerator.js';
 
 // Get DOM elements
 const imageUpload = document.getElementById('imageUpload');
@@ -34,7 +40,7 @@ let image = null;
 let fontSize = 40;
 let selectedText = null;
 let isDragging = false;
-const dragOffset = { x: 0, y: 0 };
+let dragOffset = { x: 0, y: 0 };
 
 // Text properties for each text element
 const textProperties = {
@@ -45,9 +51,9 @@ const textProperties = {
 
 // Update font size display
 fontSizeInput.addEventListener('input', (e) => {
-    fontSize = parseInt(e.target.value);
+    fontSize = validateFontSize(e.target.value);
     fontSizeValue.textContent = fontSize;
-    redrawMeme();
+    drawMeme();
 });
 
 // Function to load image from file or URL
@@ -60,14 +66,14 @@ function loadImage(imageSource) {
         canvas.height = image.height;
 
         // Maintain aspect ratio for display
-        const displayDims = calculateDisplayDimensions(image.width, image.height, 800);
+        const displayDims = calculateDisplayDimensions(image.width, image.height);
         canvas.style.width = displayDims.width + 'px';
         canvas.style.height = displayDims.height + 'px';
 
         // Initialize default positions
         initializeTextPositions(textProperties, canvas.width, canvas.height, fontSize);
 
-        redrawMeme();
+        drawMeme();
         canvas.classList.add('show');
         downloadBtn.disabled = false;
     };
@@ -80,7 +86,7 @@ function loadImage(imageSource) {
 // Handle image upload
 imageUpload.addEventListener('change', (e) => {
     const file = e.target.files[0];
-    if (validateImageFile(file)) {
+    if (file && isValidImageFile(file)) {
         const reader = new FileReader();
         reader.onload = (event) => {
             loadImage(event.target.result);
@@ -90,8 +96,6 @@ imageUpload.addEventListener('change', (e) => {
             });
         };
         reader.readAsDataURL(file);
-    } else {
-        alert('Please select a valid image file (max 10MB).');
     }
 });
 
@@ -113,42 +117,42 @@ document.querySelectorAll('.template-item').forEach(item => {
 });
 
 // Handle text input changes
-topTextInput.addEventListener('input', redrawMeme);
-centerTextInput.addEventListener('input', redrawMeme);
-bottomTextInput.addEventListener('input', redrawMeme);
+topTextInput.addEventListener('input', drawMeme);
+centerTextInput.addEventListener('input', drawMeme);
+bottomTextInput.addEventListener('input', drawMeme);
 
 // Handle color changes
 topColorInput.addEventListener('input', (e) => {
     textProperties.top.color = e.target.value;
-    redrawMeme();
+    drawMeme();
 });
 centerColorInput.addEventListener('input', (e) => {
     textProperties.center.color = e.target.value;
-    redrawMeme();
+    drawMeme();
 });
 bottomColorInput.addEventListener('input', (e) => {
     textProperties.bottom.color = e.target.value;
-    redrawMeme();
+    drawMeme();
 });
 
 // Handle rotation changes
 topRotationInput.addEventListener('input', (e) => {
-    const rotation = parseInt(e.target.value);
+    const rotation = validateRotation(e.target.value);
     textProperties.top.rotation = rotation;
     topRotationValue.textContent = rotation;
-    redrawMeme();
+    drawMeme();
 });
 centerRotationInput.addEventListener('input', (e) => {
-    const rotation = parseInt(e.target.value);
+    const rotation = validateRotation(e.target.value);
     textProperties.center.rotation = rotation;
     centerRotationValue.textContent = rotation;
-    redrawMeme();
+    drawMeme();
 });
 bottomRotationInput.addEventListener('input', (e) => {
-    const rotation = parseInt(e.target.value);
+    const rotation = validateRotation(e.target.value);
     textProperties.bottom.rotation = rotation;
     bottomRotationValue.textContent = rotation;
-    redrawMeme();
+    drawMeme();
 });
 
 // Handle text selection buttons
@@ -172,11 +176,13 @@ canvas.addEventListener('click', (e) => {
         return;
     }
 
-    const coords = getCanvasCoordinates(e, canvas);
+    const rect = canvas.getBoundingClientRect();
+    const coords = screenToCanvasCoords(e, canvas, rect);
+
     textProperties[selectedText].x = coords.x;
     textProperties[selectedText].y = coords.y;
 
-    redrawMeme();
+    drawMeme();
 });
 
 // Handle canvas drag for positioning
@@ -185,7 +191,9 @@ canvas.addEventListener('mousedown', (e) => {
         return;
     }
 
-    const coords = getCanvasCoordinates(e, canvas);
+    const rect = canvas.getBoundingClientRect();
+    const coords = screenToCanvasCoords(e, canvas, rect);
+
     dragOffset.x = coords.x - textProperties[selectedText].x;
     dragOffset.y = coords.y - textProperties[selectedText].y;
     isDragging = true;
@@ -198,11 +206,13 @@ canvas.addEventListener('mousemove', (e) => {
         return;
     }
 
-    const coords = getCanvasCoordinates(e, canvas);
+    const rect = canvas.getBoundingClientRect();
+    const coords = screenToCanvasCoords(e, canvas, rect);
+
     textProperties[selectedText].x = coords.x - dragOffset.x;
     textProperties[selectedText].y = coords.y - dragOffset.y;
 
-    redrawMeme();
+    drawMeme();
 });
 
 canvas.addEventListener('mouseup', () => {
@@ -221,14 +231,38 @@ canvas.addEventListener('mouseleave', () => {
     }
 });
 
-// Wrapper function for drawMeme that uses current state
-function redrawMeme() {
-    const textInputs = {
-        top: topTextInput,
-        center: centerTextInput,
-        bottom: bottomTextInput
-    };
-    drawMeme(ctx, image, textInputs, textProperties, fontSize);
+// Draw meme on canvas
+function drawMeme() {
+    if (!image) {
+        return;
+    }
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw image
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    // Draw top text
+    const topText = topTextInput.value;
+    if (topText) {
+        drawText(ctx, topText, textProperties.top.x, textProperties.top.y,
+            textProperties.top.color, textProperties.top.rotation, fontSize, canvas.width);
+    }
+
+    // Draw center text
+    const centerText = centerTextInput.value;
+    if (centerText) {
+        drawText(ctx, centerText, textProperties.center.x, textProperties.center.y,
+            textProperties.center.color, textProperties.center.rotation, fontSize, canvas.width);
+    }
+
+    // Draw bottom text
+    const bottomText = bottomTextInput.value;
+    if (bottomText) {
+        drawText(ctx, bottomText, textProperties.bottom.x, textProperties.bottom.y,
+            textProperties.bottom.color, textProperties.bottom.rotation, fontSize, canvas.width);
+    }
 }
 
 // Handle download
@@ -247,12 +281,23 @@ downloadBtn.addEventListener('click', () => {
     downloadCtx.drawImage(image, 0, 0, downloadCanvas.width, downloadCanvas.height);
 
     // Draw all text with properties
-    const textInputs = {
-        top: topTextInput,
-        center: centerTextInput,
-        bottom: bottomTextInput
-    };
-    drawMeme(downloadCtx, image, textInputs, textProperties, fontSize);
+    const topText = topTextInput.value;
+    if (topText) {
+        drawText(downloadCtx, topText, textProperties.top.x, textProperties.top.y,
+            textProperties.top.color, textProperties.top.rotation, fontSize, canvas.width);
+    }
+
+    const centerText = centerTextInput.value;
+    if (centerText) {
+        drawText(downloadCtx, centerText, textProperties.center.x, textProperties.center.y,
+            textProperties.center.color, textProperties.center.rotation, fontSize, canvas.width);
+    }
+
+    const bottomText = bottomTextInput.value;
+    if (bottomText) {
+        drawText(downloadCtx, bottomText, textProperties.bottom.x, textProperties.bottom.y,
+            textProperties.bottom.color, textProperties.bottom.rotation, fontSize, canvas.width);
+    }
 
     // Convert to image and download
     const dataURL = downloadCanvas.toDataURL('image/png');

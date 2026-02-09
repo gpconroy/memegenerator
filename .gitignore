@@ -33,3 +33,14 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
+
+# Audit results (uncomment to track audit history)
+# audit-results/
+
+# Test coverage (keep coverage/ in .gitignore, but audit summaries can be tracked)
+coverage/
+*.lcov
+
+# Node modules
+node_modules/
+package-lock.json

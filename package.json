@@ -1,0 +1,48 @@
+{
+  "name": "meme-generator",
+  "version": "1.0.0",
+  "description": "A simple, client-side meme generator with comprehensive audit system",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:e2e": "playwright test",
+    "test:all": "npm run test && npm run test:e2e",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format": "prettier --write \"**/*.{js,html,css,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,html,css,json,md}\"",
+    "audit:quality": "node scripts/audit-quality.js",
+    "audit:security": "node scripts/audit-security.js",
+    "audit:performance": "node scripts/audit-performance.js",
+    "audit:coverage": "jest --coverage --coverageReporters=json --coverageReporters=text --coverageReporters=html",
+    "audit:all": "node scripts/run-full-audit.js",
+    "audit:report": "node scripts/generate-audit-report.js",
+    "security:scan": "npm audit --audit-level=moderate && node scripts/security-scan.js",
+    "performance:benchmark": "node scripts/performance-benchmark.js",
+    "validate": "npm run lint && npm run format:check && npm run test && npm run security:scan"
+  },
+  "keywords": [
+    "meme",
+    "generator",
+    "canvas",
+    "html5"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.23.5",
+    "@babel/preset-env": "^7.23.5",
+    "@playwright/test": "^1.40.0",
+    "@types/jest": "^29.5.8",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.54.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^3.1.0",
+    "puppeteer": "^24.37.2"
+  },
+  "dependencies": {}
+}

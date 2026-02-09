@@ -1,0 +1,50 @@
+{
+  "reportDate": "2026-02-08T18:25:10.188Z",
+  "version": "1.0.0",
+  "executiveSummary": {
+    "overallStatus": "REVIEW REQUIRED",
+    "qualityStatus": "FAIL",
+    "securityStatus": "FAIL",
+    "performanceStatus": "UNKNOWN",
+    "recommendation": "Some audit checks failed. Review detailed reports before deployment."
+  },
+  "detailedFindings": {
+    "codeQuality": {
+      "status": "FAIL",
+      "description": "Code quality audit checks code style, organization, and maintainability.",
+      "findings": {
+        "passed": 1,
+        "total": 2,
+        "issues": 379
+      },
+      "recommendation": "Code quality issues detected. Review ESLint output for details."
+    },
+    "security": {
+      "status": "FAIL",
+      "description": "Security audit checks for vulnerabilities and security best practices.",
+      "findings": {
+        "dependencyVulnerabilities": 0,
+        "codeIssues": 1,
+        "criticalIssues": 0
+      },
+      "recommendation": "Security issues found. Review detailed security report."
+    },
+    "performance": {
+      "status": "NOT RUN",
+      "description": "Performance audit measures application speed and efficiency.",
+      "findings": null,
+      "recommendation": "Performance issues detected. Review performance metrics."
+    }
+  },
+  "compliance": {
+    "codeQualityStandards": "NON-COMPLIANT",
+    "securityStandards": "NON-COMPLIANT",
+    "performanceStandards": "NON-COMPLIANT"
+  },
+  "nextSteps": [
+    "Review failed audit checks in detailed reports.",
+    "Address identified issues before deployment.",
+    "Re-run audits after fixes are applied.",
+    "Obtain approval before proceeding to production."
+  ]
+}

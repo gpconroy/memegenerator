@@ -1,0 +1,84 @@
+---
+name: performance
+description: Performance optimization best practices
+---
+
+# Performance Best Practices
+
+## General Performance Principles
+
+- Optimize for the critical rendering path
+- Minimize main thread blocking operations
+- Use efficient algorithms and data structures
+- Profile before optimizing (measure first)
+- Optimize images and assets
+- Minimize JavaScript bundle size
+
+## JavaScript Performance
+
+### Efficient DOM Operations
+- Cache DOM queries (don't query the same element repeatedly)
+- Batch DOM updates (use DocumentFragment for multiple inserts)
+- Use event delegation for multiple elements
+- Avoid forced synchronous layouts (read then write, not interleaved)
+- Use requestAnimationFrame for animations
+
+### Memory Management
+- Clean up event listeners when no longer needed
+- Avoid memory leaks (circular references, closures)
+- Release large objects when done (set to null)
+- Use object pooling for frequently created objects
+- Limit canvas size to reasonable dimensions
+
+### Code Optimization
+- Debounce/throttle frequent events (scroll, resize, input)
+- Use efficient loops (for loops often faster than forEach for large arrays)
+- Avoid unnecessary function calls in loops
+- Use Web Workers for heavy computations
+- Lazy load non-critical resources
+
+## Image Optimization
+
+- Compress images before use
+- Use appropriate image formats (WebP, JPEG, PNG)
+- Resize images to required dimensions
+- Implement lazy loading for images
+- Use responsive images (srcset)
+- Optimize canvas operations (batch draws, use offscreen canvas)
+
+## CSS Performance
+
+- Minimize CSS file size
+- Avoid overly specific selectors
+- Use transform and opacity for animations (GPU accelerated)
+- Avoid layout thrashing (changing width/height frequently)
+- Use will-change sparingly and correctly
+- Minimize repaints and reflows
+
+## Loading Performance
+
+- Minimize initial bundle size
+- Load scripts asynchronously when possible
+- Use defer for non-critical scripts
+- Implement code splitting if applicable
+- Minimize HTTP requests
+- Use CDN for static assets
+
+## Canvas-Specific Optimization
+
+- Batch canvas operations
+- Use offscreen canvas for complex drawings
+- Clear and redraw only when necessary
+- Cache complex shapes as images
+- Limit canvas resolution to display size
+- Use requestAnimationFrame for smooth animations
+
+## Best Practices for This Project
+
+- Cache DOM element references at the top of script.js
+- Debounce text input events if needed
+- Optimize drawMeme() to only redraw when necessary
+- Limit maximum canvas dimensions
+- Compress template images
+- Use efficient text wrapping algorithm
+- Consider using offscreen canvas for download generation

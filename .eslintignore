@@ -1,0 +1,5 @@
+node_modules/
+coverage/
+audit-results/
+*.config.js
+jest.setup.js

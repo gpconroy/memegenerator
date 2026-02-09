@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-02-08T10:40:51.216Z",
+  "version": "1.0.0",
+  "security": {
+    "dependencies": {
+      "status": "PASS",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "advisories": 0
+    },
+    "codeAnalysis": {
+      "status": "FAIL",
+      "totalIssues": 1,
+      "highSeverity": 0,
+      "mediumSeverity": 1,
+      "lowSeverity": 0,
+      "issues": [
+        {
+          "type": "Missing input validation",
+          "severity": "MEDIUM",
+          "file": "script.js"
+        }
+      ]
+    },
+    "csp": {
+      "configured": false,
+      "recommendation": "Consider adding CSP meta tag"
+    }
+  },
+  "summary": {
+    "overallStatus": "FAIL",
+    "checksPassed": 1,
+    "totalChecks": 3,
+    "criticalIssues": 0
+  }
+}

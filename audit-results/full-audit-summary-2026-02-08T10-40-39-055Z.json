@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-02-08T10:41:39.087Z",
+  "version": "1.0.0",
+  "git": {
+    "commitHash": "e59538ad8d6ff7859434f0b7b455c8556411f8e1",
+    "branch": "master",
+    "commitDate": "2026-02-08 10:04:18 +0000"
+  },
+  "audits": [
+    {
+      "name": "Code Quality",
+      "status": "FAIL",
+      "error": "Command failed: node C:\\Users\\gary_\\OneDrive\\Desktop\\cs50\\memegenerator\\scripts\\audit-quality.js"
+    },
+    {
+      "name": "Security",
+      "status": "FAIL",
+      "error": "Command failed: node C:\\Users\\gary_\\OneDrive\\Desktop\\cs50\\memegenerator\\scripts\\audit-security.js"
+    },
+    {
+      "name": "Performance",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "Test Coverage",
+      "status": "FAIL",
+      "error": "Command failed: npm run audit:coverage"
+    }
+  ],
+  "reports": [
+    "C:\\Users\\gary_\\OneDrive\\Desktop\\cs50\\memegenerator\\audit-results\\quality-audit-2026-02-08T10-40-40-068Z.json",
+    "C:\\Users\\gary_\\OneDrive\\Desktop\\cs50\\memegenerator\\audit-results\\security-audit-2026-02-08T10-40-47-892Z.json"
+  ],
+  "summary": {
+    "totalAudits": 4,
+    "passedAudits": 1,
+    "failedAudits": 3,
+    "overallStatus": "FAIL"
+  }
+}

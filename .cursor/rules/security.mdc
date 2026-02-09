@@ -1,0 +1,73 @@
+---
+name: security
+description: Security best practices for web applications
+---
+
+# Security Best Practices
+
+## General Security Principles
+
+- Never trust user input - always validate and sanitize
+- Follow the principle of least privilege
+- Keep dependencies up to date
+- Never commit sensitive information (API keys, passwords, tokens)
+- Use HTTPS in production
+- Implement Content Security Policy (CSP) headers
+
+## Input Validation
+
+- Validate all user inputs on both client and server side
+- Sanitize file uploads (check file type, size, content)
+- Escape user-generated content before displaying
+- Use allowlists (whitelists) instead of blocklists when possible
+- Validate image files before processing (check MIME type, dimensions)
+
+## File Upload Security
+
+- Limit file size (e.g., max 10MB for images)
+- Validate file types (only accept image/*)
+- Check file extensions and MIME types
+- Scan uploaded files for malicious content if possible
+- Store uploaded files outside web root when possible
+- Use unique filenames to prevent overwrites
+
+## Client-Side Security
+
+- Never store sensitive data in localStorage/sessionStorage
+- Use secure cookies with HttpOnly and Secure flags (if using cookies)
+- Implement XSS protection (escape user input)
+- Use Content Security Policy to prevent XSS attacks
+- Avoid eval() and innerHTML with user input
+- Use textContent instead of innerHTML when possible
+
+## Data Handling
+
+- Don't log sensitive information
+- Clear sensitive data from memory when done
+- Use secure methods for data transmission
+- Implement rate limiting for API calls
+- Validate data before processing
+
+## Dependencies
+
+- Regularly update dependencies to patch vulnerabilities
+- Use npm audit or similar tools to check for vulnerabilities
+- Prefer well-maintained, popular packages
+- Review dependency licenses
+- Lock dependency versions (package-lock.json)
+
+## Error Messages
+
+- Don't expose sensitive information in error messages
+- Provide generic error messages to users
+- Log detailed errors server-side only
+- Don't reveal system paths or internal details
+
+## Best Practices for This Project
+
+- Validate image file types before loading
+- Limit maximum image dimensions to prevent memory issues
+- Sanitize text input to prevent XSS
+- Use canvas.toDataURL() safely (be aware of CORS restrictions)
+- Implement file size limits for uploads
+- Validate rotation and font size values

@@ -1,0 +1,80 @@
+---
+name: code-quality
+description: Code quality and organization best practices
+---
+
+# Code Quality & Organization
+
+## General Principles
+
+- Write clean, readable, and maintainable code
+- Follow consistent naming conventions
+- Keep functions small and focused (single responsibility)
+- Avoid code duplication (DRY - Don't Repeat Yourself)
+- Use meaningful variable and function names
+
+## JavaScript Best Practices
+
+### Naming Conventions
+- Use `camelCase` for variables and functions: `getUserData`, `imageUpload`
+- Use `PascalCase` for constructors/classes: `MemeGenerator`
+- Use `UPPER_SNAKE_CASE` for constants: `MAX_FILE_SIZE`, `DEFAULT_FONT_SIZE`
+- Use descriptive names: `selectedText` not `st`, `imageUpload` not `img`
+
+### Function Design
+- Functions should do one thing well
+- Keep functions under 50 lines when possible
+- Extract complex logic into separate functions
+- Use function declarations for hoisting, arrow functions for callbacks
+- Document complex functions with JSDoc comments
+
+### Code Organization
+- Group related functionality together
+- Separate concerns: DOM manipulation, business logic, event handling
+- Use modules or namespaces to avoid global namespace pollution
+- Declare variables at the top of their scope
+- Initialize variables with meaningful default values
+
+### Error Handling
+- Always handle errors gracefully
+- Use try-catch for async operations and risky code
+- Provide user-friendly error messages
+- Log errors for debugging (console.error in development)
+- Validate user input before processing
+
+### Comments
+- Write self-documenting code (code should explain itself)
+- Add comments for "why", not "what"
+- Use JSDoc for function documentation
+- Remove commented-out code before committing
+
+## HTML Best Practices
+
+- Use semantic HTML5 elements
+- Include proper meta tags (charset, viewport)
+- Use descriptive alt text for images
+- Ensure proper heading hierarchy (h1 → h2 → h3)
+- Use ARIA labels for accessibility
+- Keep HTML structure clean and organized
+
+## CSS Best Practices
+
+- Use consistent naming (BEM, OOCSS, or similar methodology)
+- Avoid inline styles
+- Use CSS variables for repeated values
+- Organize styles logically (layout, components, utilities)
+- Use mobile-first responsive design
+- Keep selectors specific but not overly nested (max 3-4 levels)
+- Use flexbox/grid for layouts instead of floats
+
+## Code Review Checklist
+
+Before committing code, ensure:
+- [ ] Code follows project conventions
+- [ ] No console.log statements left in production code
+- [ ] Error handling is in place
+- [ ] Code is tested and working
+- [ ] No commented-out code
+- [ ] Variable names are descriptive
+- [ ] Functions are appropriately sized
+- [ ] No hardcoded values that should be constants

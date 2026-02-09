@@ -1,0 +1,107 @@
+---
+name: testing
+description: Testing best practices and guidelines
+---
+
+# Testing Best Practices
+
+## General Testing Principles
+
+- Write tests alongside code (Test-Driven Development when appropriate)
+- Test critical functionality thoroughly
+- Test edge cases and error conditions
+- Keep tests simple and focused
+- Tests should be independent and repeatable
+- Maintain tests as code changes
+
+## Types of Testing
+
+### Unit Testing
+- Test individual functions in isolation
+- Mock external dependencies
+- Test both success and failure paths
+- Aim for high code coverage on critical paths
+- Keep tests fast and focused
+
+### Integration Testing
+- Test how components work together
+- Test user workflows end-to-end
+- Verify data flow between components
+- Test API integrations (if applicable)
+
+### Manual Testing
+- Test in multiple browsers
+- Test on different devices and screen sizes
+- Test with keyboard navigation
+- Test with screen readers
+- Test error scenarios
+
+## Testing Checklist
+
+Before considering code complete:
+- [ ] All functions work as expected
+- [ ] Error handling works correctly
+- [ ] Edge cases are handled (empty inputs, large files, etc.)
+- [ ] Works in target browsers
+- [ ] Responsive design works on different screen sizes
+- [ ] Keyboard navigation works
+- [ ] No console errors
+- [ ] Performance is acceptable
+
+## Test Scenarios for This Project
+
+### Image Upload
+- [ ] Valid image file uploads successfully
+- [ ] Invalid file types are rejected
+- [ ] Large files are handled appropriately
+- [ ] Error message shown on upload failure
+
+### Text Input
+- [ ] Text appears on canvas correctly
+- [ ] Text wrapping works for long text
+- [ ] Multi-line text works (Enter key)
+- [ ] Empty text doesn't break the app
+
+### Canvas Operations
+- [ ] Text positioning works (click and drag)
+- [ ] Text rotation works correctly
+- [ ] Color changes apply correctly
+- [ ] Font size changes work
+
+### Download
+- [ ] Download generates correct image
+- [ ] Downloaded image matches canvas preview
+- [ ] Download works with all text elements
+- [ ] Download filename is appropriate
+
+### Edge Cases
+- [ ] Very long text strings
+- [ ] Special characters in text
+- [ ] Very large images
+- [ ] Very small images
+- [ ] Rapid user interactions
+- [ ] Browser back/forward buttons
+
+## Browser Testing
+
+Test in:
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (if on Mac)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Performance Testing
+
+- Test with large images (5MB+)
+- Test with multiple rapid interactions
+- Monitor memory usage
+- Check for memory leaks
+- Verify smooth animations
+
+## Accessibility Testing
+
+- Test with keyboard only
+- Test with screen reader
+- Check color contrast
+- Verify focus indicators
+- Test with browser zoom (200%)

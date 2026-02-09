@@ -1,0 +1,46 @@
+---
+name: git
+description: Git version control best practices and guidelines
+---
+
+# Git Version Control Guidelines
+
+## General Principles
+
+- This project uses Git for version control. Always ensure Git is properly initialized before making significant changes.
+- Commit frequently with clear, descriptive messages.
+- Use meaningful commit messages that explain what and why, not just what.
+
+## Commit Message Format
+
+- Use present tense: "Add feature" not "Added feature"
+- Be specific: "Fix text positioning bug" not "Fix bug"
+- Keep first line under 50 characters when possible
+- Add detailed description for complex changes
+
+## Branching Strategy
+
+- Use `master` or `main` for stable, production-ready code
+- Create feature branches for new features: `git branch feature/feature-name`
+- Create bugfix branches for fixes: `git branch bugfix/issue-description`
+
+## Before Committing
+
+- Check status: `git status`
+- Review changes: `git diff`
+- Ensure all files are properly staged
+- Verify the project still works after changes
+
+## File Management
+
+- Never commit sensitive information (API keys, passwords, tokens)
+- Use `.gitignore` to exclude unnecessary files
+- Commit related changes together
+- Keep commits focused on a single logical change
+
+## Integration with Cursor
+
+- Cursor should respect Git workflow
+- When suggesting code changes, consider Git best practices
+- Remind user to commit changes regularly
+- Help create appropriate commit messages when needed

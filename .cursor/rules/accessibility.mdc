@@ -1,0 +1,80 @@
+---
+name: accessibility
+description: Web accessibility (a11y) best practices
+---
+
+# Accessibility Best Practices
+
+## General Accessibility Principles
+
+- Ensure keyboard navigation works for all interactive elements
+- Provide text alternatives for images and media
+- Use semantic HTML elements
+- Maintain sufficient color contrast (WCAG AA minimum)
+- Make forms accessible with proper labels
+- Test with screen readers
+
+## Keyboard Navigation
+
+- All interactive elements must be keyboard accessible
+- Use proper focus management
+- Provide visible focus indicators
+- Ensure logical tab order
+- Support keyboard shortcuts where appropriate
+- Don't remove default keyboard behaviors
+
+## Screen Reader Support
+
+- Use semantic HTML (nav, main, article, section, etc.)
+- Provide descriptive alt text for images
+- Use ARIA labels when HTML semantics aren't enough
+- Ensure form inputs have associated labels
+- Use ARIA live regions for dynamic content updates
+- Test with actual screen readers (NVDA, JAWS, VoiceOver)
+
+## Visual Accessibility
+
+- Maintain color contrast ratio of at least 4.5:1 for text
+- Don't rely solely on color to convey information
+- Provide text alternatives for icons
+- Ensure text is resizable (up to 200% without loss of functionality)
+- Use clear, readable fonts
+- Provide sufficient spacing between interactive elements
+
+## Form Accessibility
+
+- Associate labels with inputs using `for` attribute or wrapping
+- Provide clear error messages
+- Indicate required fields
+- Use appropriate input types (email, tel, number, etc.)
+- Group related form fields with fieldset/legend
+- Provide helpful placeholder text
+
+## ARIA (Accessible Rich Internet Applications)
+
+- Use ARIA roles when semantic HTML isn't sufficient
+- Use aria-label for unlabeled interactive elements
+- Use aria-describedby for additional context
+- Use aria-live for dynamic content updates
+- Use aria-disabled for disabled interactive elements
+- Don't overuse ARIA (prefer semantic HTML)
+
+## Focus Management
+
+- Ensure focus is visible (don't remove outline without replacement)
+- Manage focus for modal dialogs
+- Return focus to trigger element when closing modals
+- Skip links for long pages
+- Focus management for single-page applications
+
+## Best Practices for This Project
+
+- Add proper labels to all form inputs
+- Ensure color picker is keyboard accessible
+- Add aria-label to canvas for screen readers
+- Provide text alternatives for template images
+- Ensure download button is keyboard accessible
+- Add focus indicators to all interactive elements
+- Consider adding keyboard shortcuts for common actions
+- Provide error messages for file upload failures
+- Ensure text inputs are properly labeled
