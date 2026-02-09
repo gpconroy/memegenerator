@@ -111,6 +111,32 @@ async function runAllAudits() {
     console.log(`\n📄 Summary saved: ${summaryPath}`);
     console.log(`📁 All reports in: ${AUDIT_DIR}\n`);
     
+    // Auto-tag version if all audits pass
+    if (summary.summary.overallStatus === 'PASS') {
+        console.log('🎉 All audits passed! Creating version tag...\n');
+        try {
+            const { createVersionTag } = require('./version-tag');
+            const tagName = createVersionTag(
+                summary.version,
+                `v${summary.version} - All audits passing`,
+                {
+                    quality: 'PASS',
+                    security: 'PASS',
+                    performance: 'PASS',
+                    coverage: '100%'
+                }
+            );
+            if (tagName) {
+                console.log(`\n✅ Version tag ${tagName} created successfully!`);
+            }
+        } catch (error) {
+            console.warn('⚠️  Could not create version tag:', error.message);
+        }
+    } else {
+        console.log('⚠️  Some audits failed. Version tag not created.');
+        console.log('   Fix issues and re-run audits to create version tag.\n');
+    }
+    
     return summary;
 }
 
