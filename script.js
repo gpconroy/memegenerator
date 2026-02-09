@@ -29,12 +29,24 @@ const downloadBtn = document.getElementById('downloadBtn');
 const canvas = document.getElementById('memeCanvas');
 const ctx = canvas.getContext('2d');
 const selectTextBtns = document.querySelectorAll('.select-text-btn');
+const zoomInBtn = document.getElementById('zoomInBtn');
+const zoomOutBtn = document.getElementById('zoomOutBtn');
+const zoomValue = document.getElementById('zoomValue');
+const fitToScreenBtn = document.getElementById('fitToScreenBtn');
 
 let image = null;
 let fontSize = 40;
 let selectedText = null;
 let isDragging = false;
 const dragOffset = { x: 0, y: 0 };
+
+// Zoom state
+let zoomLevel = 100; // Percentage
+let baseDisplayWidth = 0;
+let baseDisplayHeight = 0;
+const MIN_ZOOM = 25;
+const MAX_ZOOM = 400;
+const ZOOM_STEP = 25;
 
 // Text properties for each text element
 const textProperties = {
@@ -50,6 +62,18 @@ fontSizeInput.addEventListener('input', (e) => {
     redrawMeme();
 });
 
+// Function to update canvas display size based on zoom
+function updateCanvasZoom() {
+    if (!image || baseDisplayWidth === 0 || baseDisplayHeight === 0) {
+        return;
+    }
+    
+    const zoomFactor = zoomLevel / 100;
+    canvas.style.width = (baseDisplayWidth * zoomFactor) + 'px';
+    canvas.style.height = (baseDisplayHeight * zoomFactor) + 'px';
+    zoomValue.textContent = zoomLevel + '%';
+}
+
 // Function to load image from file or URL
 function loadImage(imageSource) {
     image = new Image();
@@ -61,8 +85,12 @@ function loadImage(imageSource) {
 
         // Maintain aspect ratio for display
         const displayDims = calculateDisplayDimensions(image.width, image.height, 800);
-        canvas.style.width = displayDims.width + 'px';
-        canvas.style.height = displayDims.height + 'px';
+        baseDisplayWidth = displayDims.width;
+        baseDisplayHeight = displayDims.height;
+        
+        // Reset zoom to 100%
+        zoomLevel = 100;
+        updateCanvasZoom();
 
         // Initialize default positions
         initializeTextPositions(textProperties, canvas.width, canvas.height, fontSize);
@@ -85,7 +113,7 @@ imageUpload.addEventListener('change', (e) => {
         reader.onload = (event) => {
             loadImage(event.target.result);
             // Remove active state from templates
-            document.querySelectorAll('.template-item').forEach(item => {
+            document.querySelectorAll('.template-mini-item').forEach(item => {
                 item.classList.remove('active');
             });
         };
@@ -96,19 +124,41 @@ imageUpload.addEventListener('change', (e) => {
 });
 
 // Handle template selection
-document.querySelectorAll('.template-item').forEach(item => {
+document.querySelectorAll('.template-mini-item').forEach(item => {
     item.addEventListener('click', () => {
         const templatePath = item.dataset.template;
         loadImage(templatePath);
 
         // Update active state
-        document.querySelectorAll('.template-item').forEach(t => {
+        document.querySelectorAll('.template-mini-item').forEach(t => {
             t.classList.remove('active');
         });
         item.classList.add('active');
 
         // Clear file input
         imageUpload.value = '';
+    });
+});
+
+// Handle text tabs switching
+const textTabs = document.querySelectorAll('.text-tab');
+const textPanels = document.querySelectorAll('.text-panel');
+
+textTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        
+        // Update tab states
+        textTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update panel states
+        textPanels.forEach(panel => {
+            panel.classList.remove('active');
+            if (panel.dataset.text === tabName) {
+                panel.classList.add('active');
+            }
+        });
     });
 });
 
@@ -135,19 +185,19 @@ bottomColorInput.addEventListener('input', (e) => {
 topRotationInput.addEventListener('input', (e) => {
     const rotation = parseInt(e.target.value);
     textProperties.top.rotation = rotation;
-    topRotationValue.textContent = rotation;
+    topRotationValue.textContent = rotation + '°';
     redrawMeme();
 });
 centerRotationInput.addEventListener('input', (e) => {
     const rotation = parseInt(e.target.value);
     textProperties.center.rotation = rotation;
-    centerRotationValue.textContent = rotation;
+    centerRotationValue.textContent = rotation + '°';
     redrawMeme();
 });
 bottomRotationInput.addEventListener('input', (e) => {
     const rotation = parseInt(e.target.value);
     textProperties.bottom.rotation = rotation;
-    bottomRotationValue.textContent = rotation;
+    bottomRotationValue.textContent = rotation + '°';
     redrawMeme();
 });
 
@@ -230,6 +280,44 @@ function redrawMeme() {
     };
     drawMeme(ctx, image, textInputs, textProperties, fontSize);
 }
+
+// Zoom functionality
+zoomInBtn.addEventListener('click', () => {
+    if (zoomLevel < MAX_ZOOM) {
+        zoomLevel = Math.min(zoomLevel + ZOOM_STEP, MAX_ZOOM);
+        updateCanvasZoom();
+    }
+});
+
+zoomOutBtn.addEventListener('click', () => {
+    if (zoomLevel > MIN_ZOOM) {
+        zoomLevel = Math.max(zoomLevel - ZOOM_STEP, MIN_ZOOM);
+        updateCanvasZoom();
+    }
+});
+
+fitToScreenBtn.addEventListener('click', () => {
+    if (!image) return;
+    
+    // Calculate fit-to-screen dimensions
+    const canvasWrapper = document.querySelector('.canvas-wrapper');
+    const maxWidth = canvasWrapper.clientWidth - 40; // Account for padding
+    const maxHeight = canvasWrapper.clientHeight - 40;
+    
+    const displayDims = calculateDisplayDimensions(image.width, image.height, maxWidth);
+    
+    // Calculate zoom level needed to fit
+    const widthZoom = (displayDims.width / baseDisplayWidth) * 100;
+    const heightZoom = (displayDims.height / baseDisplayHeight) * 100;
+    
+    // Use the smaller zoom to ensure it fits
+    zoomLevel = Math.min(widthZoom, heightZoom);
+    
+    // Round to nearest 5%
+    zoomLevel = Math.round(zoomLevel / 5) * 5;
+    
+    updateCanvasZoom();
+});
 
 // Handle download
 downloadBtn.addEventListener('click', () => {
