@@ -20,7 +20,7 @@ export default function GalleryPage() {
           : filter === "public"
           ? { isPublic: true }
           : {},
-        orderBy: { createdAt: "desc" },
+        order: { serverCreatedAt: "desc" },
       },
     },
     upvotes: {},

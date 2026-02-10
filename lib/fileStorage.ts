@@ -1,13 +1,27 @@
 import { db } from "./db";
 
 /**
- * Upload a file to InstantDB storage
- * Note: Using base64 encoding as InstantDB storage API may require different setup
+ * Upload a file to InstantDB storage.
+ * Uses InstantDB's Storage API when available, falls back to compressed base64.
  */
 export async function uploadFile(file: File): Promise<string> {
-  // For now, use base64 encoding as InstantDB file storage API may need additional setup
-  // TODO: Implement proper InstantDB file storage when API is available
-  return await fileToBase64(file);
+  try {
+    // Try using InstantDB's built-in storage API
+    const result = await db.storage.upload(file.name, file);
+    if (result?.data?.url) {
+      return result.data.url;
+    }
+    // Some versions return the path directly
+    if (typeof result === "string") {
+      return result;
+    }
+  } catch {
+    // Storage API not available or failed - fall back to compressed base64
+  }
+
+  // Fallback: compress the image to JPEG at reduced quality to stay within
+  // InstantDB's transaction size limits (~4MB max for a single attribute).
+  return await fileToCompressedBase64(file, 0.6, 1200);
 }
 
 /**
@@ -42,5 +56,48 @@ async function fileToBase64(file: File): Promise<string> {
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = reject;
     reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Compress and convert file to base64.
+ * Re-encodes the image as JPEG at the given quality, scaling down if needed,
+ * so the resulting data-URL string stays small enough for InstantDB transactions.
+ */
+async function fileToCompressedBase64(
+  file: File,
+  quality: number = 0.6,
+  maxDimension: number = 1200
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        let { width, height } = img;
+
+        // Scale down if larger than maxDimension
+        if (width > maxDimension || height > maxDimension) {
+          const ratio = Math.min(maxDimension / width, maxDimension / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Could not get canvas context"));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        resolve(dataUrl);
+      } catch (err) {
+        reject(err);
+      }
+    };
+    img.onerror = () => reject(new Error("Failed to load image for compression"));
+    img.src = URL.createObjectURL(file);
   });
 }

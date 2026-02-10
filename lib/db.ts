@@ -46,11 +46,20 @@ const createDeepProxy = (target: any): any => {
       const db = getOrInitDb();
       const value = db[prop];
       
+      // Bind functions so they keep the correct `this` context
+      if (typeof value === 'function') {
+        return value.bind(db);
+      }
+      
       // If the value is an object (like 'auth'), wrap it in a proxy too
       if (value && typeof value === 'object' && !value.$$typeof) {
         return new Proxy(value, {
           get(_, nestedProp) {
-            return value[nestedProp];
+            const nestedValue = value[nestedProp];
+            if (typeof nestedValue === 'function') {
+              return nestedValue.bind(value);
+            }
+            return nestedValue;
           }
         });
       }

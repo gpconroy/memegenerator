@@ -41,13 +41,15 @@ export default function TemplateLoader({ onTemplateSelect }: TemplateLoaderProps
       <span className="toolbar-label">Templates:</span>
       <div className="templates-mini">
         {allTemplates.map((template) => (
-          <div
+          <button
             key={template.id}
             className="template-mini-item"
+            type="button"
             onClick={() => onTemplateSelect(getImageUrl(template))}
+            aria-label={`Template: ${template.name}`}
           >
             <img src={getImageUrl(template)} alt={template.name} />
-          </div>
+          </button>
         ))}
       </div>
     </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { use } from "react";
 import Navigation from "@/components/Navigation";
 import MemeEditor from "@/components/MemeEditor";
 import { useRouter } from "next/navigation";
@@ -8,9 +7,9 @@ import { useRouter } from "next/navigation";
 export default function MemePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = use(params);
+  const { id } = params;
   const router = useRouter();
 
   const handleSave = () => {

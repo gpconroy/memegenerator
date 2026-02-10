@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { tx } from "@instantdb/react";
+import { tx, id } from "@instantdb/react";
 import { db } from "@/lib/db";
 import { getFileUrl } from "@/lib/fileStorage";
 import Link from "next/link";
@@ -78,8 +78,8 @@ export default function MemeCard({ meme, upvoteCount, hasUpvoted }: MemeCardProp
         setCurrentUpvoteCount((prev) => Math.max(0, prev - 1));
         setCurrentHasUpvoted(false);
       } else {
-        // Add upvote - generate ID
-        const upvoteId = `upvote_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        // Add upvote
+        const upvoteId = id();
         await db.transact(tx.upvotes[upvoteId].update({
           userId: user.id,
           memeId: meme.id,

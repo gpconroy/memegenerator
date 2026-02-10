@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { tx } from "@instantdb/react";
+import { id, tx } from "@instantdb/react";
 import TemplateLoader from "./TemplateLoader";
 import { db } from "@/lib/db";
-import { uploadFile } from "@/lib/fileStorage";
+import { uploadFile, getFileUrl } from "@/lib/fileStorage";
 import {
   canvasToBlob,
   drawText,
@@ -61,6 +61,61 @@ export default function MemeEditor({ memeId, onSave }: MemeEditorProps) {
   );
 
   const { user } = db.useAuth();
+
+  // Query existing meme data when memeId is provided
+  const { data: memeData } = db.useQuery(
+    memeId
+      ? { memes: { $: { where: { id: memeId } } } }
+      : { memes: { $: { where: { id: "__none__" } } } }
+  );
+
+  // Load existing meme data into state
+  const loadedMemeIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!memeId || !memeData?.memes?.length) return;
+    // Prevent re-loading if we already loaded this meme
+    if (loadedMemeIdRef.current === memeId) return;
+
+    const meme = memeData.memes[0];
+    if (!meme.imageFileId) return;
+
+    loadedMemeIdRef.current = memeId;
+
+    // Restore text values
+    setTextValues({
+      top: meme.topText ?? "TOP TEXT",
+      center: meme.centerText ?? "",
+      bottom: meme.bottomText ?? "BOTTOM TEXT",
+    });
+
+    // Restore text properties
+    setTextProperties({
+      top: {
+        x: meme.topX ?? 0,
+        y: meme.topY ?? 0,
+        color: meme.topColor ?? "#ffffff",
+        rotation: meme.topRotation ?? 0,
+        fontSize: meme.topFontSize ?? 48,
+      },
+      center: {
+        x: meme.centerX ?? 0,
+        y: meme.centerY ?? 0,
+        color: meme.centerColor ?? "#ffffff",
+        rotation: meme.centerRotation ?? 0,
+        fontSize: meme.centerFontSize ?? 42,
+      },
+      bottom: {
+        x: meme.bottomX ?? 0,
+        y: meme.bottomY ?? 0,
+        color: meme.bottomColor ?? "#ffffff",
+        rotation: meme.bottomRotation ?? 0,
+        fontSize: meme.bottomFontSize ?? 48,
+      },
+    });
+
+    // Load the image
+    setImageUrl(getFileUrl(meme.imageFileId));
+  }, [memeId, memeData]);
 
   const hasImage = Boolean(imageUrl);
 
@@ -195,11 +250,10 @@ export default function MemeEditor({ memeId, onSave }: MemeEditorProps) {
       const title = prompt("Enter a title for your meme:") || "Untitled Meme";
       const isPublic = confirm("Make this meme public?");
 
-      const id =
-        memeId || `meme_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+      const memeEntityId = memeId || id();
 
       await db.transact(
-        tx.memes[id].update({
+        tx.memes[memeEntityId].update({
           userId: user.id,
           title,
           imageFileId: fileId,
@@ -231,9 +285,10 @@ export default function MemeEditor({ memeId, onSave }: MemeEditorProps) {
 
       alert("Meme saved successfully!");
       onSave?.();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving meme:", error);
-      alert("Failed to save meme. Please try again.");
+      const msg = error?.message || error?.body?.message || String(error);
+      alert(`Failed to save meme: ${msg}`);
     } finally {
       setIsSaving(false);
     }
