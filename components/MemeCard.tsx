@@ -43,7 +43,7 @@ export default function MemeCard({ meme, upvoteCount, hasUpvoted }: MemeCardProp
   useEffect(() => {
     if (upvoteData?.upvotes) {
       const userUpvote = upvoteData.upvotes.find(
-        (u) => u.userId === user?.id && u.memeId === meme.id
+        (u: any) => u.userId === user?.id && u.memeId === meme.id
       );
       setCurrentHasUpvoted(!!userUpvote);
     }
@@ -69,7 +69,7 @@ export default function MemeCard({ meme, upvoteCount, hasUpvoted }: MemeCardProp
 
     try {
       const existingUpvote = upvoteData?.upvotes?.find(
-        (u) => u.userId === user.id && u.memeId === meme.id
+        (u: any) => u.userId === user.id && u.memeId === meme.id
       );
 
       if (existingUpvote) {

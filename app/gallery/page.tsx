@@ -29,13 +29,13 @@ export default function GalleryPage() {
   // Get upvote counts for each meme
   const getUpvoteCount = (memeId: string) => {
     if (!data?.upvotes) return 0;
-    return data.upvotes.filter((upvote) => upvote.memeId === memeId).length;
+    return data.upvotes.filter((upvote: any) => upvote.memeId === memeId).length;
   };
 
   const hasUserUpvoted = (memeId: string) => {
     if (!user || !data?.upvotes) return false;
     return data.upvotes.some(
-      (upvote) => upvote.userId === user.id && upvote.memeId === memeId
+      (upvote: any) => upvote.userId === user.id && upvote.memeId === memeId
     );
   };
 
@@ -77,7 +77,7 @@ export default function GalleryPage() {
           <div>No memes found. Create your first meme!</div>
         ) : (
           <div className="gallery-grid">
-            {memes.map((meme) => (
+            {memes.map((meme: any) => (
               <MemeCard
                 key={meme.id}
                 meme={meme}

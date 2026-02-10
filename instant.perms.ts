@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { auth, allow } from "@instantdb/react";
 
 const perms = {

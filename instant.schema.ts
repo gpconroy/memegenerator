@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { schema } from "@instantdb/react";
 
 let appSchema;

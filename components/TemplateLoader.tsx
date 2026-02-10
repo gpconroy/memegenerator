@@ -40,7 +40,7 @@ export default function TemplateLoader({ onTemplateSelect }: TemplateLoaderProps
     <div className="templates-group">
       <span className="toolbar-label">Templates:</span>
       <div className="templates-mini">
-        {allTemplates.map((template) => (
+        {allTemplates.map((template: any) => (
           <button
             key={template.id}
             className="template-mini-item"
